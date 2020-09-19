@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace WorkWithDB
 {
+    /// <summary>
+    /// Описывает сотрудника компании
+    /// </summary>
     class Person : INotifyPropertyChanged
     {
         private int personId;        
@@ -18,7 +21,7 @@ namespace WorkWithDB
         private DateTime dateUnEmploy;
         private int status;      
         private int departmentId;
-        private int idPost;
+        private int postId;
 
         /// <summary>
         /// Id сотрудника
@@ -29,7 +32,7 @@ namespace WorkWithDB
             set
             {
                 personId = value;
-                OnPropertyChanged("EmployeeId");
+                OnPropertyChanged(nameof(PersonId));
             }  
         }                
        
@@ -42,7 +45,7 @@ namespace WorkWithDB
             set
             {
                 firstName = value;
-                OnPropertyChanged("FirstName");
+                OnPropertyChanged(nameof(FirstName));
             }
         }
 
@@ -55,7 +58,7 @@ namespace WorkWithDB
             set
             {
                 secondName = value;
-                OnPropertyChanged("SecondName");
+                OnPropertyChanged(nameof(SecondName));
             }
         }
 
@@ -68,7 +71,7 @@ namespace WorkWithDB
             set
             {
                 lastName = value;
-                OnPropertyChanged("LastName");
+                OnPropertyChanged(nameof(LastName));
             }
         }
 
@@ -81,7 +84,7 @@ namespace WorkWithDB
             set
             {
                 dateEmploy = value;
-                OnPropertyChanged("DateEmploy");
+                OnPropertyChanged(nameof(DateEmploy));
             }
         }
 
@@ -94,20 +97,20 @@ namespace WorkWithDB
             set
             {
                 dateUnEmploy = value;
-                OnPropertyChanged("DateUnEmploy");
+                OnPropertyChanged(nameof(DateUnEmploy));
             }
         }
 
         /// <summary>
         /// Статус
         /// </summary>
-        public int Status
+        public int StatusId
         {
             get { return status; }
             set
             {
                 status = value;
-                OnPropertyChanged("Status");
+                OnPropertyChanged(nameof(StatusId));
             }
         }
 
@@ -121,19 +124,20 @@ namespace WorkWithDB
             set
             {
                 departmentId = value;
-                OnPropertyChanged("DepartmentId");
+                OnPropertyChanged(nameof(DepartmentId));
             }
         }
 
-
-
-        public int IdPost
+        /// <summary>
+        ///  Код должнсти
+        /// </summary>
+        public int PostId
         {
-            get { return idPost; }
+            get { return postId; }
             set
             {
-                idPost = value;
-                OnPropertyChanged("IdPost");
+                postId = value;
+                OnPropertyChanged(nameof(PostId));
             }
         }
 
