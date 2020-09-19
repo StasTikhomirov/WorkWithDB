@@ -9,11 +9,10 @@ using System.Threading.Tasks;
 namespace WorkWithDB
 {
     /// <summary>
-    /// Описывает сущность - Подразделение
+    /// Описывает отдел
     /// </summary>
     class Department : INotifyPropertyChanged
-    {
-      
+    {      
         private int departmentId;       
         private string name;
 
@@ -26,7 +25,7 @@ namespace WorkWithDB
             set
             {
                 departmentId = value;
-                OnPropertyChanged("DepartmentId");
+                OnPropertyChanged(nameof(DepartmentId));
             }
         }
 
@@ -39,7 +38,7 @@ namespace WorkWithDB
             set
             {
                 name = value;
-                OnPropertyChanged("Name");
+                OnPropertyChanged(nameof(Name));
             }
         }
 
