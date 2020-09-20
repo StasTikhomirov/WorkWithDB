@@ -1,0 +1,15 @@
+C:\Users\Stast\OneDrive\Документы\Visual Studio 2019\WorkWithDB\WorkWithDB\bin\Debug\WorkWithDB.exe.config
+C:\Users\Stast\OneDrive\Документы\Visual Studio 2019\WorkWithDB\WorkWithDB\bin\Debug\WorkWithDB.exe
+C:\Users\Stast\OneDrive\Документы\Visual Studio 2019\WorkWithDB\WorkWithDB\bin\Debug\WorkWithDB.pdb
+C:\Users\Stast\OneDrive\Документы\Visual Studio 2019\WorkWithDB\WorkWithDB\obj\Debug\WorkWithDB.csprojAssemblyReference.cache
+C:\Users\Stast\OneDrive\Документы\Visual Studio 2019\WorkWithDB\WorkWithDB\obj\Debug\MainWindow.g.cs
+C:\Users\Stast\OneDrive\Документы\Visual Studio 2019\WorkWithDB\WorkWithDB\obj\Debug\App.g.cs
+C:\Users\Stast\OneDrive\Документы\Visual Studio 2019\WorkWithDB\WorkWithDB\obj\Debug\WorkWithDB_MarkupCompile.cache
+C:\Users\Stast\OneDrive\Документы\Visual Studio 2019\WorkWithDB\WorkWithDB\obj\Debug\WorkWithDB_MarkupCompile.lref
+C:\Users\Stast\OneDrive\Документы\Visual Studio 2019\WorkWithDB\WorkWithDB\obj\Debug\MainWindow.baml
+C:\Users\Stast\OneDrive\Документы\Visual Studio 2019\WorkWithDB\WorkWithDB\obj\Debug\WorkWithDB.g.resources
+C:\Users\Stast\OneDrive\Документы\Visual Studio 2019\WorkWithDB\WorkWithDB\obj\Debug\WorkWithDB.Properties.Resources.resources
+C:\Users\Stast\OneDrive\Документы\Visual Studio 2019\WorkWithDB\WorkWithDB\obj\Debug\WorkWithDB.csproj.GenerateResource.cache
+C:\Users\Stast\OneDrive\Документы\Visual Studio 2019\WorkWithDB\WorkWithDB\obj\Debug\WorkWithDB.csproj.CoreCompileInputs.cache
+C:\Users\Stast\OneDrive\Документы\Visual Studio 2019\WorkWithDB\WorkWithDB\obj\Debug\WorkWithDB.exe
+C:\Users\Stast\OneDrive\Документы\Visual Studio 2019\WorkWithDB\WorkWithDB\obj\Debug\WorkWithDB.pdb
