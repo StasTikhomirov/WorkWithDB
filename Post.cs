@@ -64,7 +64,7 @@ namespace WorkWithDB
         /// <returns>Спсок должностей</returns>
         public static List<Post> GetPosts()
         {
-            List<Post> persons = new List<Post>();
+            List<Post> posts = new List<Post>();
 
             // название процедуры
             string sqlExpression = "dbo.sp_GetPosts";
@@ -91,7 +91,7 @@ namespace WorkWithDB
                 {
                     while (reader.Read())
                     {
-                        persons.Add(new Post()
+                        posts.Add(new Post()
                         {
                             PostId = Convert.ToInt32(reader["id"]),                            
                             Name = (reader["name"].ToString())
@@ -102,7 +102,7 @@ namespace WorkWithDB
             }
             connection.Close();
 
-            return persons;
+            return posts;
         }
     }
 }
