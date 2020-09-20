@@ -14,9 +14,7 @@ namespace WorkWithDB
     /// Описывает сотрудника компании
     /// </summary>
     class Person : INotifyPropertyChanged
-    {
-        static string connectionString = @"Data Source=DESKTOP-62FHBOF;Initial Catalog=guide;Integrated Security=True";
-
+    {       
         private int personId;        
         private string secondName;        
         private string firstName;       
@@ -170,7 +168,7 @@ namespace WorkWithDB
             // название процедуры
             string sqlExpression = "dbo.sp_GetPersons";
 
-            SqlConnection connection = new SqlConnection(connectionString);
+            SqlConnection connection = new SqlConnection(SQLSettings.ConnectionString);
             try
             {
                 connection.Open();
