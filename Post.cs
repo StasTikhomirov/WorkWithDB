@@ -59,9 +59,9 @@ namespace WorkWithDB
 
         //----------------------------------------------------------------------------------------------------
         /// <summary>
-        /// Получение данных о сотрудниках 
+        /// Получение данных о должностях
         /// </summary>
-        /// <returns>Спсок сотрудников</returns>
+        /// <returns>Спсок должностей</returns>
         public static List<Post> GetPosts()
         {
             List<Post> persons = new List<Post>();
