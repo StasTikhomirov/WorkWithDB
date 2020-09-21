@@ -14,6 +14,7 @@ namespace WorkWithDB
         /// <summary>
         /// Строка подключения к базе данных
         /// </summary>
-        public static string ConnectionString = @"Data Source=DESKTOP-62FHBOF;Initial Catalog=guide;Integrated Security=True";
+        public static string ConnectionString = "Data Source=DESKTOP-IQRT15H;Initial Catalog=TestDB;Integrated Security=True";
+        // @"Data Source=DESKTOP-62FHBOF;Initial Catalog=guide;Integrated Security=True";
     }
 }

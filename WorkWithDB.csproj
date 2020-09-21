@@ -56,9 +56,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="dbViewModel.cs" />
+    <Compile Include="GeneralPersonsInfo.cs" />
     <Compile Include="Post.cs" />
     <Compile Include="DataBaseConnector.cs" />
     <Compile Include="Status.cs" />
+    <Compile Include="TestDBDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestDBDataSet.xsd</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -95,6 +101,17 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="TestDBDataSet.xsc">
+      <DependentUpon>TestDBDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="TestDBDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>TestDBDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="TestDBDataSet.xss">
+      <DependentUpon>TestDBDataSet.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
