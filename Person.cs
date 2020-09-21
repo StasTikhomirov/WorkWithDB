@@ -19,8 +19,8 @@ namespace WorkWithDB
         private string secondName;        
         private string firstName;       
         private string lastName;             
-        private DateTime dateEmploy;
-        private DateTime dateUnEmploy;
+        private DateTime? dateEmploy;
+        private DateTime? dateUnEmploy;
         private int status;      
         private int departmentId;
         private int postId;
@@ -79,9 +79,9 @@ namespace WorkWithDB
         }
 
         /// <summary>
-        /// Дата наема
+        /// Дата найма
         /// </summary>
-        public DateTime DateEmploy
+        public DateTime? DateEmploy
         {
             get { return dateEmploy; }
             set
@@ -94,7 +94,7 @@ namespace WorkWithDB
         /// <summary>
         /// Дата увольнения
         /// </summary>
-        public DateTime DateUnEmploy
+        public DateTime? DateUnEmploy
         {
             get { return dateUnEmploy; }
             set
@@ -190,18 +190,35 @@ namespace WorkWithDB
                 {
                     while (reader.Read())
                     {
+                        //DateTime? date = Convert.IsDBNull(reader["date_uneploy"]);
+                        //if (e.HasValue)
+                        //{
+                        //    MessageBox.Show("Null");
+                        //}
+                        //object sqlDateTime = reader["date_uneploy"];
+                        //DateTime? dt = (sqlDateTime == System.DBNull.Value)
+                        //    ? (DateTime?)null
+                        //    : Convert.ToDateTime(sqlDateTime);
+
+                        //if (!dt.HasValue)
+                        //{
+                        //    MessageBox.Show("Null");
+                        //}
+
                         persons.Add(new Person()
                         {
                             PersonId = Convert.ToInt32(reader["id"]),
                             FirstName = (reader["first_name"].ToString()),
                             SecondName = (reader["second_name"].ToString()),
-                            LastName = (reader["last_name"].ToString()),                           
-                            //DateEmploy = Convert.ToDateTime(reader["date_employ"]): DateTime.MinValue,
-                            //DateUnEmploy = Convert.ToDateTime(reader["date_unemploy"]) ?? DateTime.MinValue,
+                            LastName = (reader["last_name"].ToString()),
+                            DateEmploy = (reader["date_employ"] == DBNull.Value) ? (DateTime?)null : 
+                                                        Convert.ToDateTime(reader["date_employ"]),
+                            DateUnEmploy = (reader["date_uneploy"] == DBNull.Value) ? (DateTime?)null : 
+                                                        Convert.ToDateTime(reader["date_uneploy"]),
                             StatusId = Convert.ToInt32(reader["status"]),
                             DepartmentId = Convert.ToInt32(reader["id_dep"]),
                             PostId = Convert.ToInt32(reader["id_post"]),
-                        });
+                        }); 
                     }
                 }
                 reader.Close();                

@@ -12,8 +12,8 @@ namespace WorkWithDB
     {
         private int personId;
         private string name;       
-        private DateTime dateEmploy;
-        private DateTime dateUnEmploy;
+        private DateTime? dateEmploy;
+        private DateTime? dateUnEmploy;
         private string status;
         private string department;
         private string post;
@@ -49,7 +49,7 @@ namespace WorkWithDB
         /// <summary>
         /// Дата наема
         /// </summary>
-        public DateTime DateEmploy
+        public DateTime? DateEmploy
         {
             get { return dateEmploy; }
             set
@@ -62,7 +62,7 @@ namespace WorkWithDB
         /// <summary>
         /// Дата увольнения
         /// </summary>
-        public DateTime DateUnEmploy
+        public DateTime? DateUnEmploy
         {
             get { return dateUnEmploy; }
             set

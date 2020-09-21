@@ -4,32 +4,70 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkWithDB"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        mc:Ignorable="d"        
+        Title="Сотрудники" Height="450" Width="800" >
 
     <Window.DataContext>
         <local:dbViewModel/>
     </Window.DataContext>
+    
     <Grid>
-        <DataGrid x:Name="Persons" AlternatingRowBackground="Gray" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding GeneralInfo}" Margin="2,2,-111,2">
-            <DataGrid.Resources>
-                <Style TargetType="{x:Type DataGridColumnHeader}">
-                    <Setter Property="FontSize" Value="16" />
-                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                </Style>
-            </DataGrid.Resources>
-            <DataGrid.Columns>
-                <DataGridTextColumn  Header="Код сотрудника" Binding="{Binding Path=PersonId}" Width="auto"/>
-                <DataGridTextColumn Header="ФИО" Binding="{Binding Path=Name}" Width="auto"/>
-                <DataGridTextColumn Header="Дата приема на работу" Binding="{Binding Path=DateEmploy}" Width="auto"/>
-                <DataGridTextColumn Header="Дата увольнения" Binding="{Binding Path=DateUnEmploy}" Width="auto"/>
-                <DataGridTextColumn Header="Статус" Binding="{Binding Path=Status}" Width="auto"/>
-                <DataGridTextColumn Header="Отдел" Binding="{Binding Path=Department}" Width="auto"/>
-                <DataGridTextColumn Header="Должность" Binding="{Binding Path=Post}" Width="auto"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <TabControl x:Name="CompanyPersonal">
+            <TabItem x:Name="PersonsTab">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Height="10" Width="10" Fill="Black" />
+                        <TextBlock Margin="3">Общая информация</TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
 
+                <TabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>                            
+                        </Grid.RowDefinitions>
 
+                        <DockPanel>
+                            <TextBox x:Name="PersonSearch" MaxLength="20" TextWrapping="NoWrap" BorderThickness="0"  BorderBrush="Transparent" Grid.Column="1" Background="Transparent" HorizontalAlignment="Stretch" ToolTip="Введите текст для поиска" VerticalAlignment="Top" />
+                            <Label Content="Поиск по ФИО"  HorizontalAlignment="Left"  VerticalAlignment="Top"  Height="26" Width="138"/>
+                        </DockPanel>
+                        
+                        <DataGrid Grid.Row="1" x:Name="Persons" AlternatingRowBackground="Aquamarine"  IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding GeneralInfo}" Margin = "2" AllowDrop="True">
+                            <DataGrid.Resources>
+                                <Style TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="FontSize" Value="16" />
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn  Header="ID" Binding="{Binding Path=PersonId}" Width="auto" MaxWidth="30" />
+                                <DataGridTextColumn Header="ФИО" Binding="{Binding Path=Name}" Width="auto"/>
+                                <DataGridTextColumn Header="Дата найма" Binding="{Binding Path=DateEmploy}" Width="auto"/>
+                                <DataGridTextColumn Header="Дата увольнения" Binding="{Binding Path=DateUnEmploy}" Width="auto"/>
+                                <DataGridTextColumn Header="Статус" Binding="{Binding Path=Status}" Width="auto"/>
+                                <DataGridTextColumn Header="Отдел" Binding="{Binding Path=Department}" Width="auto"/>
+                                <DataGridTextColumn Header="Должность" Binding="{Binding Path=Post}" Width="auto"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem x:Name="StatisticTab">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Height="10" Width="10" Fill="Black" />
+                        <TextBlock Margin="3">Статистика</TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <TabItem.Content>
+
+                    <TextBlock></TextBlock>
+                </TabItem.Content>
+            </TabItem>
+        </TabControl>
 
     </Grid>
 </Window>

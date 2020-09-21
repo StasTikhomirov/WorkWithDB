@@ -106,8 +106,8 @@ namespace WorkWithDB
                 {
                     PersonId = person.PersonId,
                     Name = person.SecondName + ' ' + io,
-                    //DateEmploy = person.DateEmploy,
-                    // DateUnEmploy = person.DateUnEmploy,
+                    DateEmploy = person.DateEmploy,
+                    DateUnEmploy = person.DateUnEmploy,
                     Status = Statuses.Find(x => x.StatusId == person.StatusId).Name,
                     Department = Departments.Find(x => x.DepartmentId == person.DepartmentId).Name,
                     Post = Posts.Find(x => x.PostId == person.PostId).Name
