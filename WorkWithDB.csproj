@@ -57,7 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="dbViewModel.cs" />
     <Compile Include="Post.cs" />
-    <Compile Include="SQLSettings.cs" />
+    <Compile Include="DataBaseConnector.cs" />
     <Compile Include="Status.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

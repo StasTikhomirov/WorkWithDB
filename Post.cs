@@ -69,7 +69,7 @@ namespace WorkWithDB
             // название процедуры
             string sqlExpression = "dbo.sp_GetPosts";
 
-            SqlConnection connection = new SqlConnection(SQLSettings.ConnectionString);
+            SqlConnection connection = new SqlConnection(DataBaseConnector.ConnectionString);
             try
             {
                 connection.Open();

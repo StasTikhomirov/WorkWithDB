@@ -9,7 +9,7 @@ namespace WorkWithDB
     /// <summary>
     /// Описывает настройки взаимодействия с базой данных
     /// </summary>
-    public static class SQLSettings
+    public static class DataBaseConnector
     {
         /// <summary>
         /// Строка подключения к базе данных

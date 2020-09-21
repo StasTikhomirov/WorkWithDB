@@ -27,6 +27,20 @@ namespace WorkWithDB
         public static readonly DependencyProperty ItemsProperty =
             DependencyProperty.Register("Items", typeof(ICollectionView), typeof(dbViewModel), new PropertyMetadata(null));
 
+
+
+
+        public List<Post> Posts
+        {
+            get { return (List<Post>> Posts)GetValue(MyPropertyProperty); }
+            set { SetValue(MyPropertyProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MyPropertyProperty =
+            DependencyProperty.Register("MyProperty", typeof(List<Post> Posts), typeof(dbViewModel), new PropertyMetadata(null));
+
+
         /// <summary>
         /// Задает коллекцию для работы с данными
         /// </summary>

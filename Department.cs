@@ -62,14 +62,14 @@ namespace WorkWithDB
         /// Получение данных о должностях
         /// </summary>
         /// <returns>Спсок должностей</returns>
-        public static List<Department> GetPosts()
+        public static List<Department> GetDepartments()
         {
             List<Department> departments = new List<Department>();
 
             // название процедуры
             string sqlExpression = "dbo.sp_GetDepartments";
 
-            SqlConnection connection = new SqlConnection(SQLSettings.ConnectionString);
+            SqlConnection connection = new SqlConnection(DataBaseConnector.ConnectionString);
             try
             {
                 connection.Open();

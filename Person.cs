@@ -168,7 +168,7 @@ namespace WorkWithDB
             // название процедуры
             string sqlExpression = "dbo.sp_GetPersons";
 
-            SqlConnection connection = new SqlConnection(SQLSettings.ConnectionString);
+            SqlConnection connection = new SqlConnection(DataBaseConnector.ConnectionString);
             try
             {
                 connection.Open();
