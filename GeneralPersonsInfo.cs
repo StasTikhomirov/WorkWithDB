@@ -42,7 +42,7 @@ namespace WorkWithDB
             set
             {
                 name = value;
-                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged(nameof(Name));                 
             }
         }
 

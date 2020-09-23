@@ -28,12 +28,18 @@
                             <RowDefinition Height="auto"/>                            
                         </Grid.RowDefinitions>
 
-                        <DockPanel>
+                        <!--<DockPanel>
                             <TextBox x:Name="PersonSearch" MaxLength="20" TextWrapping="NoWrap" BorderThickness="0"  BorderBrush="Transparent" Grid.Column="1" Background="Transparent" HorizontalAlignment="Stretch" ToolTip="Введите текст для поиска" VerticalAlignment="Top" />
                             <Label Content="Поиск по ФИО"  HorizontalAlignment="Left"  VerticalAlignment="Top"  Height="26" Width="138"/>
-                        </DockPanel>
-                        
-                        <DataGrid Grid.Row="1" x:Name="Persons" AlternatingRowBackground="Aquamarine"  IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding GeneralInfo}" Margin = "2" AllowDrop="True">
+                        </DockPanel>-->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <TextBlock Text="Поиск по ФИО" VerticalAlignment="Center" />
+                            <TextBox Text="{Binding FilterByName,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="100"/>
+                            <TextBlock Text="Поиск по отделу" VerticalAlignment="Center" Margin="5"/>
+                            <TextBox Text="{Binding FilterByDepartment,UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                        <DataGrid Grid.Row="1" x:Name="Persons" AlternatingRowBackground="Aquamarine"  IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding GeneralInfoCollection}" Margin = "2" AllowDrop="True">
                             <DataGrid.Resources>
                                 <Style TargetType="{x:Type DataGridColumnHeader}">
                                     <Setter Property="FontSize" Value="16" />
