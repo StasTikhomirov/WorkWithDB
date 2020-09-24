@@ -31,6 +31,12 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>                            
                         </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                             <TextBlock Text="Поиск по ФИО" VerticalAlignment="Center" />
@@ -39,7 +45,7 @@
                             <TextBox Text="{Binding FilterByDepartment,UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <DataGrid Grid.Row="1" x:Name="Persons" ItemsSource="{Binding GeneralInfoCollection}" AlternatingRowBackground="Aquamarine"  IsReadOnly="True" AutoGenerateColumns="False" Margin = "2" AllowDrop="True">
+                        <DataGrid Grid.Row="1" Grid.ColumnSpan="4" x:Name="Persons" ItemsSource="{Binding GeneralInfoCollection}" AlternatingRowBackground="Aquamarine"  IsReadOnly="True" AutoGenerateColumns="False" Margin = "2" AllowDrop="True">
                             <DataGrid.Resources>
                                 <Style TargetType="{x:Type DataGridColumnHeader}">
                                     <Setter Property="FontSize" Value="16" />
