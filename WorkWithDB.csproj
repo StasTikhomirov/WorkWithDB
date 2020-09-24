@@ -59,6 +59,7 @@
     <Compile Include="GeneralPersonsInfo.cs" />
     <Compile Include="Post.cs" />
     <Compile Include="DataBaseConnector.cs" />
+    <Compile Include="RelayCommand.cs" />
     <Compile Include="Status.cs" />
     <Compile Include="TestDBDataSet.Designer.cs">
       <AutoGen>True</AutoGen>

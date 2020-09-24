@@ -4,78 +4,107 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace WorkWithDB
 {
-    class dbViewModel : DependencyObject
+    class dbViewModel : DependencyObject, INotifyPropertyChanged
     {
         private ICollectionView generalInfoCollection;
         private ObservableCollection<GeneralPersonsInfo> generalCollection;
 
+        private bool employ;
+        private bool unEmploy;
+        private DateTime? dateFrom;
+        private DateTime? dateTo;
+        private string selectedStatus;
+        private string outputText;
+
         #region Properties
 
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Cписок сотрудников
+        /// </summary>
         public List<Person> Persons
         {
-            get { return (List<Person>)GetValue(ItemsProperty); }
-            set { SetValue(ItemsProperty, value); }
+            get { return (List<Person>)GetValue(PersonsProperty); }
+            set { SetValue(PersonsProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Items.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ItemsProperty =
+        public static readonly DependencyProperty PersonsProperty =
             DependencyProperty.Register("Items", typeof(List<Person>), typeof(dbViewModel), new PropertyMetadata(null));
 
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Cписок должностей
+        /// </summary>
         public List<Post> Posts
         {
             get { return (List<Post>)GetValue(PostsProperty); }
             set { SetValue(PostsProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Posts.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PostsProperty =
             DependencyProperty.Register("Posts", typeof(List<Post>), typeof(dbViewModel), new PropertyMetadata(null));
 
-
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Список статусов
+        /// </summary>
         public List<Status> Statuses
         {
             get { return (List<Status>)GetValue(StatusesProperty); }
             set { SetValue(StatusesProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Posts.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty StatusesProperty =
             DependencyProperty.Register("Statuses", typeof(List<Status>), typeof(dbViewModel), new PropertyMetadata(null));
 
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Cписок отделов
+        /// </summary>
         public List<Department> Departments
         {
             get { return (List<Department>)GetValue(DepartmentsProperty); }
             set { SetValue(DepartmentsProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Departments.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DepartmentsProperty =
             DependencyProperty.Register("Departments", typeof(List<Department>), typeof(dbViewModel), new PropertyMetadata(null));
 
-        public List<GeneralPersonsInfo> GeneralInfo
-        {
-            get { return (List<GeneralPersonsInfo>)GetValue(GeneralInfoProperty); }
-            set { SetValue(GeneralInfoProperty, value); }
-        }
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Общий список данных о сотрудниках
+        /// </summary>
+        //public List<GeneralPersonsInfo> GeneralInfo
+        //{
+        //    get { return (List<GeneralPersonsInfo>)GetValue(GeneralInfoProperty); }
+        //    set { SetValue(GeneralInfoProperty, value); }
+        //}
 
-        // Using a DependencyProperty as the backing store for GeneralInfo.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty GeneralInfoProperty =
-            DependencyProperty.Register("GeneralInfo", typeof(List<GeneralPersonsInfo>), typeof(dbViewModel), new PropertyMetadata(null));
+        //public static readonly DependencyProperty GeneralInfoProperty =
+        //    DependencyProperty.Register("GeneralInfo", typeof(List<GeneralPersonsInfo>), typeof(dbViewModel), new PropertyMetadata(null));
 
-
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Коллекция для отображения 
+        /// </summary>
         public ICollectionView GeneralInfoCollection
         {
             get { return generalInfoCollection; }
             set { generalInfoCollection = value; }               
         }
 
+        /// <summary>
+        /// Общая коллекция с данными о сотрудниках
+        /// </summary>
         public ObservableCollection<GeneralPersonsInfo> GeneralCollection
         {
             get { return generalCollection; }
@@ -134,23 +163,136 @@ namespace WorkWithDB
         public static readonly DependencyProperty FilterByPostProperty =
             DependencyProperty.Register("FilterByPost", typeof(string), typeof(dbViewModel), new PropertyMetadata("", FilterByPost_Changed));
 
+
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Принят на работу
+        /// </summary>
+        public bool Employ
+        {
+            get
+            {
+                return employ;
+            }
+            set
+            {
+                employ = value;
+                OnPropertyChanged(nameof(Employ));
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Уволен с работы
+        /// </summary>
+        public bool UnEmploy
+        {
+            get
+            {
+                return unEmploy;
+            }
+            set
+            {
+                unEmploy = value;
+                OnPropertyChanged(nameof(UnEmploy));
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Teкст для вывода статистики
+        /// </summary>
+        public string OutputText
+        {
+            get
+            {
+                return outputText;
+            }
+            set
+            {
+                outputText = value;
+                OnPropertyChanged(nameof(OutputText));
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Дата начала периода для поиска
+        /// </summary>
+        public DateTime? DateFrom
+        {
+            get
+            {
+                return dateFrom;
+            }
+            set
+            {
+                dateFrom = value;
+                OnPropertyChanged(nameof(DateFrom));
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Дата начала периода для поиска
+        /// </summary>
+        public DateTime? DateTo
+        {
+            get
+            {
+                return dateTo;
+            }
+            set
+            {
+                dateTo = value;
+                OnPropertyChanged(nameof(DateTo));
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Выбранный статус для отображения статистики
+        /// </summary>
+        public string SelectedStatus
+        {
+            get
+            {
+                return selectedStatus;
+            }
+            set
+            {
+                selectedStatus = value;
+                OnPropertyChanged(nameof(SelectedStatus));
+            }
+        }
         #endregion
 
         //----------------------------------------------------------------------------------------------------
         /// <summary>
-        /// Получает данные
-        /// Вызывает метод заполнения общего списка
+        /// Инициализирует ViewModel
         /// </summary>
         public dbViewModel()
         {
+            // Получение данных из Моделей
             Persons = Person.GetPersons();
             Posts = Post.GetPosts();
             Statuses = Status.GetStatuses();
             Departments = Department.GetDepartments();
 
-            //SetGeneralInfo();
+            // Заполнение коллекции для отображения            
             SetGeneralСollection();
+
+            //Добавление фильтра к таблице
             GeneralInfoCollection.Filter += Filter;
+
+            // Изначальные критерии для статистики
+            Employ = false;
+            UnEmploy = false;
+            DateFrom = Persons.Min(p => p.DateEmploy); // минимальная дата приема на работу
+            DateTo = DateTime.Today;  
+            
+            // инициализация команды для выполнения поиска
+            GetStatisticsCommand = new RelayCommand(GetStatictics);           
         }
 
         #region FIO_Filter
@@ -262,32 +404,6 @@ namespace WorkWithDB
 
         #endregion
 
-        //----------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// Задает общий список, с информацией о сотрудниках
-        /// </summary>
-        private void SetGeneralInfo()
-        {
-            GeneralInfo = new List<GeneralPersonsInfo>();
-
-            foreach (var person in Persons)
-            {
-                string io = person.FirstName.ElementAt(0) + "." + person.LastName.ElementAt(0) + ".";
-               
-                GeneralInfo.Add(new GeneralPersonsInfo()
-                {
-                    PersonId = person.PersonId,
-                    Name = person.SecondName + ' ' + io,
-                    DateEmploy = person.DateEmploy,
-                    DateUnEmploy = person.DateUnEmploy,
-                    Status = Statuses.Find(x => x.StatusId == person.StatusId).Name,
-                    Department = Departments.Find(x => x.DepartmentId == person.DepartmentId).Name,
-                    Post = Posts.Find(x => x.PostId == person.PostId).Name
-                }); 
-            };
-
-            GeneralInfoCollection = CollectionViewSource.GetDefaultView(GeneralInfo);
-        }
 
         //----------------------------------------------------------------------------------------------------
         /// <summary>
@@ -296,7 +412,7 @@ namespace WorkWithDB
         private void SetGeneralСollection()
         {
             GeneralCollection = new ObservableCollection<GeneralPersonsInfo>();
-
+            
             foreach (var person in Persons)
             {
                 string io = person.FirstName.ElementAt(0) + "." + person.LastName.ElementAt(0) + ".";
@@ -315,6 +431,63 @@ namespace WorkWithDB
 
             GeneralInfoCollection = CollectionViewSource.GetDefaultView(GeneralCollection);
         }
+
+
+        //----------------------------------------------------------------------------------------------------
+       /// <summary>
+       /// Команда отображения статистики
+       /// </summary>
+        public ICommand GetStatisticsCommand { get; set; }        
+        private void GetStatictics(object sender)
+        {
+            int personsCount = 0;
+            if (Employ)
+            {
+                personsCount = GeneralCollection.Count(i => i.Status == SelectedStatus && i.DateEmploy > DateFrom && (!i.DateUnEmploy.HasValue || i.DateEmploy < DateTo));
+            }
+            else
+            {
+                if (UnEmploy)
+                {
+                    personsCount = GeneralCollection.Count(i => i.Status == SelectedStatus && (!i.DateUnEmploy.HasValue || i.DateUnEmploy > DateFrom) && (!i.DateUnEmploy.HasValue || i.DateUnEmploy < DateTo));
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBoxResult.No;
+
+                    if (!string.IsNullOrEmpty(SelectedStatus))
+                    {
+                        result = MessageBox.Show("Вы не выбрали, кто вас интересует: Нанятые или Уволенные сотрудники. \n Показать количество всех сотрудников компании c этим статусом?", "Отсутствие выбора критерия", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            personsCount = GeneralCollection.Count(i => i.Status == SelectedStatus);
+                        }
+                    }
+                    else
+                    {
+                        result = MessageBox.Show("Вы не выбрали ни одного критерия. \n Показать количество всех сотрудников компании?", "Отсутствие выбора критерия", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            personsCount = GeneralCollection.Count();
+                        }
+                    }       
+                }
+            }
+            
+            OutputText = "Количество сотрудников, удовлетворяющих условиям : " + personsCount.ToString();                      
+        }
+
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Обработчик собития изменения свойств класса
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string property = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+        }
+
         //----------------------------------------------------------------------------------------------------
 
     }

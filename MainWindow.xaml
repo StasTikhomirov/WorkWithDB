@@ -10,7 +10,11 @@
     <Window.DataContext>
         <local:dbViewModel/>
     </Window.DataContext>
-    
+
+    <!--<Window.Resources>
+        <local:dbViewModel x:Key="dbViewModel" />
+    </Window.Resources>-->
+
     <Grid>
         <TabControl x:Name="CompanyPersonal">
             <TabItem x:Name="PersonsTab">
@@ -28,18 +32,14 @@
                             <RowDefinition Height="auto"/>                            
                         </Grid.RowDefinitions>
 
-                        <!--<DockPanel>
-                            <TextBox x:Name="PersonSearch" MaxLength="20" TextWrapping="NoWrap" BorderThickness="0"  BorderBrush="Transparent" Grid.Column="1" Background="Transparent" HorizontalAlignment="Stretch" ToolTip="Введите текст для поиска" VerticalAlignment="Top" />
-                            <Label Content="Поиск по ФИО"  HorizontalAlignment="Left"  VerticalAlignment="Top"  Height="26" Width="138"/>
-                        </DockPanel>-->
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                             <TextBlock Text="Поиск по ФИО" VerticalAlignment="Center" />
                             <TextBox Text="{Binding FilterByName,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="100"/>
                             <TextBlock Text="Поиск по отделу" VerticalAlignment="Center" Margin="5"/>
                             <TextBox Text="{Binding FilterByDepartment,UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center"/>
-                                </StackPanel>
+                        </StackPanel>
 
-                        <DataGrid Grid.Row="1" x:Name="Persons" AlternatingRowBackground="Aquamarine"  IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding GeneralInfoCollection}" Margin = "2" AllowDrop="True">
+                        <DataGrid Grid.Row="1" x:Name="Persons" ItemsSource="{Binding GeneralInfoCollection}" AlternatingRowBackground="Aquamarine"  IsReadOnly="True" AutoGenerateColumns="False" Margin = "2" AllowDrop="True">
                             <DataGrid.Resources>
                                 <Style TargetType="{x:Type DataGridColumnHeader}">
                                     <Setter Property="FontSize" Value="16" />
@@ -69,8 +69,43 @@
                 </TabItem.Header>
 
                 <TabItem.Content>
+                    <Grid>                        
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="100"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition MinWidth="150"/>
+                            <ColumnDefinition MinWidth="150"/>
+                        </Grid.ColumnDefinitions>
 
-                    <TextBlock></TextBlock>
+                        <TextBlock Grid.Row="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" FontSize="18" VerticalAlignment="Center">
+                             Выберите критерии для отображения статистики
+                        </TextBlock>
+
+                        <RadioButton GroupName="WorkStatus" IsChecked="{Binding Path=Employ}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">Принят на работу</RadioButton>
+                        <RadioButton GroupName="WorkStatus" IsChecked="{Binding Path=UnEmploy}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Уволен с работы</RadioButton>
+
+                        <DatePicker SelectedDate="{Binding Path=DateFrom}" Grid.Row="1" Grid.Column="1" Name="datePicker1" IsDropDownOpen="False" SelectedDateFormat="Short" Margin="2" />
+                        <DatePicker SelectedDate="{Binding Path=DateTo}"  Grid.Row="2" Grid.Column="1" Name="datePicker2" IsDropDownOpen="False" SelectedDateFormat="Short" Margin="2" />
+
+                        <ComboBox Grid.Row="1" Grid.Column="2" Grid.RowSpan="2"  ItemsSource="{Binding Path=Statuses}"    
+                                DisplayMemberPath="Name" SelectedValuePath="Name" Margin="2"
+                                SelectedValue="{Binding Path=SelectedStatus}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" 
+                                Text="Текущий статус сотрудника"  IsEditable="True"  IsReadOnly="True">                          
+                        </ComboBox>
+
+                        <Button Name="ShowPersonsButton" Grid.Row="1" Grid.Column="3" Grid.RowSpan="2" Command="{Binding GetStatisticsCommand}">
+                            Показать количество сотрудников
+                        </Button>
+
+                        <TextBlock x:Name="ShowPersonsCount" Text="{Binding OutputText}" Grid.Row="3" Grid.RowSpan="3" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
+
+                   </Grid>                    
                 </TabItem.Content>
             </TabItem>
         </TabControl>
