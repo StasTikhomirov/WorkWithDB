@@ -283,7 +283,7 @@ namespace WorkWithDB
             SetGeneralСollection();
 
             //Добавление фильтра к таблице
-            GeneralInfoCollection.Filter += Filter;
+            //GeneralInfoCollection.Filter += Filter;
 
             // Изначальные критерии для статистики
             Employ = false;
@@ -292,7 +292,10 @@ namespace WorkWithDB
             DateTo = DateTime.Today;  
             
             // инициализация команды для выполнения поиска
-            GetStatisticsCommand = new RelayCommand(GetStatictics);           
+            GetStatisticsCommand = new RelayCommand(GetStatictics);
+
+            // 
+            ClearFilterCommand = new RelayCommand(ClearFilter);
         }
 
         #region FIO_Filter
@@ -311,24 +314,24 @@ namespace WorkWithDB
             return result;
         }
 
-        private bool Filter(object person)
-        {
-            GeneralPersonsInfo current = person as GeneralPersonsInfo;
-            //you can write logic for filter here
-            //if (!string.IsNullOrEmpty(FilterByName) && !string.IsNullOrEmpty(FilterByDepartment))
-            //    return current.Department.Contains(FilterByDepartment) && current.Name.Contains(FilterByName);
-            //else if (string.IsNullOrEmpty(FilterByName))
-            //    return current.Department.Contains(FilterByDepartment);
-            //else
-            //    return current.Name.Contains(FilterByName);
+        //private bool Filter(object person)
+        //{
+        //    GeneralPersonsInfo current = person as GeneralPersonsInfo;
+        //    //you can write logic for filter here
+        //    //if (!string.IsNullOrEmpty(FilterByName) && !string.IsNullOrEmpty(FilterByDepartment))
+        //    //    return current.Department.Contains(FilterByDepartment) && current.Name.Contains(FilterByName);
+        //    //else if (string.IsNullOrEmpty(FilterByName))
+        //    //    return current.Department.Contains(FilterByDepartment);
+        //    //else
+        //    //    return current.Name.Contains(FilterByName);
 
-            if (!string.IsNullOrEmpty(FilterByName) && !string.IsNullOrEmpty(FilterByDepartment) && !string.IsNullOrEmpty(FilterByStatus))
-                return current.Department.Contains(FilterByDepartment) && current.Name.Contains(FilterByName) && current.Status.Contains(FilterByStatus);
-            else if (string.IsNullOrEmpty(FilterByName))
-                return current.Department.Contains(FilterByDepartment);
-            else
-                return current.Name.Contains(FilterByName);
-        }
+        //    if (!string.IsNullOrEmpty(FilterByName) && !string.IsNullOrEmpty(FilterByDepartment) && !string.IsNullOrEmpty(FilterByStatus))
+        //        return current.Department.Contains(FilterByDepartment) && current.Name.Contains(FilterByName) && current.Status.Contains(FilterByStatus);
+        //    else if (string.IsNullOrEmpty(FilterByName))
+        //        return current.Department.Contains(FilterByDepartment);
+        //    else
+        //        return current.Name.Contains(FilterByName);
+        //}
 
         //----------------------------------------------------------------------------------------------------
         /// <summary>
@@ -341,7 +344,10 @@ namespace WorkWithDB
             {
                 //current.GeneralInfoCollection.Filter = null;
                 //current.GeneralInfoCollection.Filter += current.FilterFIO;
-                current.GeneralInfoCollection.Filter += current.Filter;
+                // current.GeneralInfoCollection.Filter += current.Filter;
+                current.GeneralInfoCollection.Filter = null;
+                current.GeneralInfoCollection.Filter = current.FilterFIO;
+
             }
         }
 
@@ -350,23 +356,32 @@ namespace WorkWithDB
             var current = d as dbViewModel;
             if (current != null)
             {
-                current.GeneralInfoCollection.Filter += current.Filter;
+                //current.GeneralInfoCollection.Filter += current.Filter;
+                current.GeneralInfoCollection.Filter = null;
+                current.GeneralInfoCollection.Filter = current.FilterStatus;
             }
         }
 
         private static void FilterByPost_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            AddFilter(d);
-        }
-
-        private static void AddFilter(DependencyObject d)
-        {
+            //AddFilter(d);
             var current = d as dbViewModel;
             if (current != null)
             {
-                current.GeneralInfoCollection.Filter += current.Filter;
+                //current.GeneralInfoCollection.Filter += current.Filter;
+                current.GeneralInfoCollection.Filter = null;
+                current.GeneralInfoCollection.Filter = current.FilterPost;
             }
         }
+
+        //private static void AddFilter(DependencyObject d)
+        //{
+        //    var current = d as dbViewModel;
+        //    if (current != null)
+        //    {
+        //        current.GeneralInfoCollection.Filter += current.Filter;
+        //    }
+        //}
 
         #endregion
 
@@ -387,6 +402,18 @@ namespace WorkWithDB
             return result;
         }
 
+
+        private bool FilterStatus(object obj)
+        {
+            bool result = true;
+            GeneralPersonsInfo currentPerson = obj as GeneralPersonsInfo;
+            if (!string.IsNullOrEmpty(FilterByStatus) && currentPerson != null && !currentPerson.Status.ToLower().Contains(FilterByStatus.ToLower()))
+            {
+                return false;
+            }
+            return result;
+        }
+
         //----------------------------------------------------------------------------------------------------
         /// <summary>
         /// Обработчик события изменения текста для поиска по ФИО
@@ -396,14 +423,29 @@ namespace WorkWithDB
             var current = d as dbViewModel;
             if (current != null)
             {
-                //current.GeneralInfoCollection.Filter = null;
-                //current.GeneralInfoCollection.Filter += current.FilterDepartment;
-                current.GeneralInfoCollection.Filter += current.Filter;
+                current.GeneralInfoCollection.Filter = null;
+                current.GeneralInfoCollection.Filter = current.FilterDepartment;
+                //current.GeneralInfoCollection.Filter += current.Filter;
             }
         }
 
         #endregion
 
+
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Проверяет возможность фильтрации по ФИО
+        /// </summary>      
+        private bool FilterPost(object obj)
+        {
+            bool result = true;
+            GeneralPersonsInfo currentPerson = obj as GeneralPersonsInfo;
+            if (!string.IsNullOrEmpty(FilterByPost) && currentPerson != null && !currentPerson.Post.ToLower().Contains(FilterByPost.ToLower()))
+            {
+                return false;
+            }
+            return result;
+        }
 
         //----------------------------------------------------------------------------------------------------
         /// <summary>
@@ -477,10 +519,25 @@ namespace WorkWithDB
             OutputText = "Количество сотрудников, удовлетворяющих условиям : " + personsCount.ToString();                      
         }
 
+        public ICommand ClearFilterCommand { get; set; }
+
+        private void ClearFilter(object sender)
+        {
+            var current = sender as dbViewModel;
+            if (current != null)
+            {
+                current.GeneralInfoCollection.Filter = null;
+            }
+            FilterByName = string.Empty;
+            FilterByDepartment = string.Empty;
+            FilterByPost = string.Empty;
+            FilterByStatus = string.Empty;
+        }
+
         //----------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// Обработчик собития изменения свойств класса
-        /// </summary>
+            /// <summary>
+            /// Обработчик собития изменения свойств класса
+            /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string property = "")
         {

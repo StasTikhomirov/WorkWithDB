@@ -10,11 +10,7 @@
     <Window.DataContext>
         <local:dbViewModel/>
     </Window.DataContext>
-
-    <!--<Window.Resources>
-        <local:dbViewModel x:Key="dbViewModel" />
-    </Window.Resources>-->
-
+   
     <Grid>
         <TabControl x:Name="CompanyPersonal">
             <TabItem x:Name="PersonsTab">
@@ -31,21 +27,22 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>                            
                         </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-
+      
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                            <TextBlock Text="Поиск по ФИО" VerticalAlignment="Center" />
-                            <TextBox Text="{Binding FilterByName,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="100"/>
-                            <TextBlock Text="Поиск по отделу" VerticalAlignment="Center" Margin="5"/>
+                            <TextBlock  Text="Поиск по : ФИО" VerticalAlignment="Center" />
+                            <TextBox   Text="{Binding FilterByName,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="100"/>
+                            <TextBlock Text="Статусу" VerticalAlignment="Center" Margin="5"/>
+                            <TextBox Text="{Binding FilterByStatus,UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center"/>
+                            <TextBlock Text="Отделу" VerticalAlignment="Center" Margin="5"/>
                             <TextBox Text="{Binding FilterByDepartment,UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center"/>
+                            <TextBlock Text="Должности" VerticalAlignment="Center" Margin="5" HorizontalAlignment="Right"/>
+                            <TextBox Text="{Binding FilterByPost,UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center"/>
+                            <Button Name="ClearFilterButton" Command="{Binding ClearFilterCommand}" Margin="10 5">
+                                Сбросить фильтры
+                            </Button>
                         </StackPanel>
 
-                        <DataGrid Grid.Row="1" Grid.ColumnSpan="4" x:Name="Persons" ItemsSource="{Binding GeneralInfoCollection}" AlternatingRowBackground="Aquamarine"  IsReadOnly="True" AutoGenerateColumns="False" Margin = "2" AllowDrop="True">
+                        <DataGrid Grid.Row="1" x:Name="Persons" ItemsSource="{Binding GeneralInfoCollection}" AlternatingRowBackground="Aquamarine"  IsReadOnly="True" AutoGenerateColumns="False" Margin = "2" AllowDrop="True">
                             <DataGrid.Resources>
                                 <Style TargetType="{x:Type DataGridColumnHeader}">
                                     <Setter Property="FontSize" Value="16" />
@@ -53,7 +50,7 @@
                                 </Style>
                             </DataGrid.Resources>
                             <DataGrid.Columns>
-                                <DataGridTextColumn  Header="ID" Binding="{Binding Path=PersonId}" Width="auto" MaxWidth="30" />
+                                <DataGridTextColumn Header="ID" Binding="{Binding Path=PersonId}" Width="auto" MaxWidth="30" />
                                 <DataGridTextColumn Header="ФИО" Binding="{Binding Path=Name}" Width="auto"/>
                                 <DataGridTextColumn Header="Дата найма" Binding="{Binding Path=DateEmploy}" Width="auto"/>
                                 <DataGridTextColumn Header="Дата увольнения" Binding="{Binding Path=DateUnEmploy}" Width="auto"/>
