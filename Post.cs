@@ -18,6 +18,7 @@ namespace WorkWithDB
         private int postId;
         private string name;
 
+        #region Properties
         /// <summary>
         /// Код должности
         /// </summary>
@@ -43,33 +44,22 @@ namespace WorkWithDB
                 OnPropertyChanged(nameof(Name));
             }
         }
+        #endregion
 
-
-        //----------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// Обработчик собития изменения свойств класса
-        /// </summary>
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string property = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-        }
 
         //----------------------------------------------------------------------------------------------------
         /// <summary>
         /// Получение данных о должностях
         /// </summary>
         /// <returns>Спсок должностей</returns>
-        public static List<Post> GetPosts()
+        public static List<Post> GetPosts(string connectionString)
         {
             List<Post> posts = new List<Post>();
 
             // название процедуры
             string sqlExpression = "dbo.sp_GetPosts";
 
-            SqlConnection connection = new SqlConnection(DataBaseConnector.ConnectionString);
+            SqlConnection connection = new SqlConnection(connectionString);
             try
             {
                 connection.Open();
@@ -77,7 +67,7 @@ namespace WorkWithDB
             catch (SqlException se)
             {
                 MessageBox.Show(se.Message, "Ошибка соединения", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
+                return posts;
             }
 
             using (connection)
@@ -103,6 +93,21 @@ namespace WorkWithDB
             connection.Close();
 
             return posts;
+        } 
+        
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Обработчик собития изменения свойств класса
+        /// </summary>
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string property = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
         }
+        //----------------------------------------------------------------------------------------------------
+
     }
+    //----------------------------------------------------------------------------------------------------
 }

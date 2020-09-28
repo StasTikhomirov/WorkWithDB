@@ -18,6 +18,7 @@ namespace WorkWithDB
         private int departmentId;       
         private string name;
 
+        #region Properties
         /// <summary>
         /// Код подразделения
         /// </summary>
@@ -43,33 +44,21 @@ namespace WorkWithDB
                 OnPropertyChanged(nameof(Name));
             }
         }
-
-
-        //----------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// Обработчик собития изменения свойств класса
-        /// </summary>
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string property = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-        }
+        #endregion
 
         //----------------------------------------------------------------------------------------------------
         /// <summary>
         /// Получение данных о должностях
         /// </summary>
         /// <returns>Спсок должностей</returns>
-        public static List<Department> GetDepartments()
-        {
+        public static List<Department> GetDepartments(string connectionString)
+        {           
             List<Department> departments = new List<Department>();
 
             // название процедуры
             string sqlExpression = "dbo.sp_GetDepartments";
 
-            SqlConnection connection = new SqlConnection(DataBaseConnector.ConnectionString);
+            SqlConnection connection = new SqlConnection(connectionString);
             try
             {
                 connection.Open();
@@ -77,7 +66,7 @@ namespace WorkWithDB
             catch (SqlException se)
             {
                 MessageBox.Show(se.Message, "Ошибка соединения", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
+                return departments;
             }
 
             using (connection)
@@ -103,6 +92,19 @@ namespace WorkWithDB
             connection.Close();
 
             return departments;
+        }
+
+
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Обработчик собития изменения свойств класса
+        /// </summary>
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string property = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
         }
     }
 }

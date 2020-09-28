@@ -161,14 +161,14 @@ namespace WorkWithDB
         /// Получение данных о сотрудниках 
         /// </summary>
         /// <returns>Спсок сотрудников</returns>
-        public static List<Person> GetPersons()
+        public static List<Person> GetPersons(string connectionString)
         {
             List<Person> persons = new List<Person>();
 
             // название процедуры
             string sqlExpression = "dbo.sp_GetPersons";
 
-            SqlConnection connection = new SqlConnection(DataBaseConnector.ConnectionString);
+            SqlConnection connection = new SqlConnection(connectionString);
             try
             {
                 connection.Open();
@@ -176,7 +176,7 @@ namespace WorkWithDB
             catch (SqlException se)
             {
                 MessageBox.Show( se.Message,"Ошибка соединения",MessageBoxButton.OK,MessageBoxImage.Error);
-                return null;
+                return persons;
             }
 
             using (connection)
@@ -190,21 +190,6 @@ namespace WorkWithDB
                 {
                     while (reader.Read())
                     {
-                        //DateTime? date = Convert.IsDBNull(reader["date_uneploy"]);
-                        //if (e.HasValue)
-                        //{
-                        //    MessageBox.Show("Null");
-                        //}
-                        //object sqlDateTime = reader["date_uneploy"];
-                        //DateTime? dt = (sqlDateTime == System.DBNull.Value)
-                        //    ? (DateTime?)null
-                        //    : Convert.ToDateTime(sqlDateTime);
-
-                        //if (!dt.HasValue)
-                        //{
-                        //    MessageBox.Show("Null");
-                        //}
-
                         persons.Add(new Person()
                         {
                             PersonId = Convert.ToInt32(reader["id"]),

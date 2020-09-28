@@ -1,0 +1,36 @@
+﻿<Window x:Class="WorkWithDB.ConnectToDBWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WorkWithDB"
+        mc:Ignorable="d"
+        Title="Окно подключения к базе данных" 
+        Height="250" Width="700" Background="Gainsboro" FontSize="18"
+        WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
+
+    <Window.DataContext>
+        <local:DataBaseConnector/>
+    </Window.DataContext>
+    <Window.Visibility>
+        <Binding Path="Visibility" UpdateSourceTrigger='PropertyChanged'/>
+    </Window.Visibility>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="50" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            Введите строку подключения к базе данных
+        </TextBlock>
+
+        <TextBox Grid.Row="1" Margin="5" FontSize="18" Text="{Binding ConnectionString,UpdateSourceTrigger=PropertyChanged}"/>
+
+        <Button Grid.Row="2" Command="{Binding ConnectToDBCommand}" >
+            Подключиться к базе данных
+        </Button>        
+    </Grid>
+</Window>

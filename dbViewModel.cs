@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -17,14 +18,14 @@ namespace WorkWithDB
     {
         private ICollectionView generalInfoCollection;
         private ObservableCollection<GeneralPersonsInfo> generalCollection;
-
+       
         private bool employ;
         private bool unEmploy;
         private DateTime? dateFrom;
         private DateTime? dateTo;
         private string selectedStatus;
         private string outputText;
-
+       
         #region Properties
 
         //----------------------------------------------------------------------------------------------------
@@ -81,19 +82,6 @@ namespace WorkWithDB
 
         //----------------------------------------------------------------------------------------------------
         /// <summary>
-        /// Общий список данных о сотрудниках
-        /// </summary>
-        //public List<GeneralPersonsInfo> GeneralInfo
-        //{
-        //    get { return (List<GeneralPersonsInfo>)GetValue(GeneralInfoProperty); }
-        //    set { SetValue(GeneralInfoProperty, value); }
-        //}
-
-        //public static readonly DependencyProperty GeneralInfoProperty =
-        //    DependencyProperty.Register("GeneralInfo", typeof(List<GeneralPersonsInfo>), typeof(dbViewModel), new PropertyMetadata(null));
-
-        //----------------------------------------------------------------------------------------------------
-        /// <summary>
         /// Коллекция для отображения 
         /// </summary>
         public ICollectionView GeneralInfoCollection
@@ -146,7 +134,6 @@ namespace WorkWithDB
             set { SetValue(FilterByStatusProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for FilterByStatus.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty FilterByStatusProperty =
             DependencyProperty.Register("FilterByStatus", typeof(string), typeof(dbViewModel), new PropertyMetadata("", FilterByStatus_Changed));
 
@@ -159,10 +146,8 @@ namespace WorkWithDB
             set { SetValue(FilterByPostProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for FilterByPost.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty FilterByPostProperty =
             DependencyProperty.Register("FilterByPost", typeof(string), typeof(dbViewModel), new PropertyMetadata("", FilterByPost_Changed));
-
 
         //----------------------------------------------------------------------------------------------------
         /// <summary>
@@ -267,38 +252,32 @@ namespace WorkWithDB
         }
         #endregion
 
-        //----------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// Инициализирует ViewModel
-        /// </summary>
         public dbViewModel()
         {
             // Получение данных из Моделей
-            Persons = Person.GetPersons();
-            Posts = Post.GetPosts();
-            Statuses = Status.GetStatuses();
-            Departments = Department.GetDepartments();
+            string connectionString = DataBaseConnector.readConnectingString();
+            Persons = Person.GetPersons(connectionString);
+            Posts = Post.GetPosts(connectionString);
+            Statuses = Status.GetStatuses(connectionString);
+            Departments = Department.GetDepartments(connectionString);
 
             // Заполнение коллекции для отображения            
             SetGeneralСollection();
-
-            //Добавление фильтра к таблице
-            //GeneralInfoCollection.Filter += Filter;
 
             // Изначальные критерии для статистики
             Employ = false;
             UnEmploy = false;
             DateFrom = Persons.Min(p => p.DateEmploy); // минимальная дата приема на работу
-            DateTo = DateTime.Today;  
-            
-            // инициализация команды для выполнения поиска
+            DateTo = DateTime.Today;
+
+            // инициализация команды для получения статистики
             GetStatisticsCommand = new RelayCommand(GetStatictics);
 
-            // 
+            // инициализация команды сброса поиска
             ClearFilterCommand = new RelayCommand(ClearFilter);
         }
 
-        #region FIO_Filter
+        #region Filters
         //----------------------------------------------------------------------------------------------------
         /// <summary>
         /// Проверяет возможность фильтрации по ФИО
@@ -313,26 +292,7 @@ namespace WorkWithDB
             }
             return result;
         }
-
-        //private bool Filter(object person)
-        //{
-        //    GeneralPersonsInfo current = person as GeneralPersonsInfo;
-        //    //you can write logic for filter here
-        //    //if (!string.IsNullOrEmpty(FilterByName) && !string.IsNullOrEmpty(FilterByDepartment))
-        //    //    return current.Department.Contains(FilterByDepartment) && current.Name.Contains(FilterByName);
-        //    //else if (string.IsNullOrEmpty(FilterByName))
-        //    //    return current.Department.Contains(FilterByDepartment);
-        //    //else
-        //    //    return current.Name.Contains(FilterByName);
-
-        //    if (!string.IsNullOrEmpty(FilterByName) && !string.IsNullOrEmpty(FilterByDepartment) && !string.IsNullOrEmpty(FilterByStatus))
-        //        return current.Department.Contains(FilterByDepartment) && current.Name.Contains(FilterByName) && current.Status.Contains(FilterByStatus);
-        //    else if (string.IsNullOrEmpty(FilterByName))
-        //        return current.Department.Contains(FilterByDepartment);
-        //    else
-        //        return current.Name.Contains(FilterByName);
-        //}
-
+        
         //----------------------------------------------------------------------------------------------------
         /// <summary>
         /// Обработчик события изменения текста для поиска по ФИО
@@ -341,68 +301,16 @@ namespace WorkWithDB
         {
             var current = d as dbViewModel;
             if (current != null)
-            {
-                //current.GeneralInfoCollection.Filter = null;
-                //current.GeneralInfoCollection.Filter += current.FilterFIO;
-                // current.GeneralInfoCollection.Filter += current.Filter;
+            {                
                 current.GeneralInfoCollection.Filter = null;
                 current.GeneralInfoCollection.Filter = current.FilterFIO;
-
             }
         }
 
-        private static void FilterByStatus_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var current = d as dbViewModel;
-            if (current != null)
-            {
-                //current.GeneralInfoCollection.Filter += current.Filter;
-                current.GeneralInfoCollection.Filter = null;
-                current.GeneralInfoCollection.Filter = current.FilterStatus;
-            }
-        }
-
-        private static void FilterByPost_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            //AddFilter(d);
-            var current = d as dbViewModel;
-            if (current != null)
-            {
-                //current.GeneralInfoCollection.Filter += current.Filter;
-                current.GeneralInfoCollection.Filter = null;
-                current.GeneralInfoCollection.Filter = current.FilterPost;
-            }
-        }
-
-        //private static void AddFilter(DependencyObject d)
-        //{
-        //    var current = d as dbViewModel;
-        //    if (current != null)
-        //    {
-        //        current.GeneralInfoCollection.Filter += current.Filter;
-        //    }
-        //}
-
-        #endregion
-
-
-        #region Department_Filter
         //----------------------------------------------------------------------------------------------------
         /// <summary>
-        /// Проверяет возможность фильтрации по Отделу
-        /// </summary>        
-        private bool FilterDepartment(object obj)
-        {
-            bool result = true;
-            GeneralPersonsInfo currentPerson = obj as GeneralPersonsInfo;
-            if (!string.IsNullOrEmpty(FilterByDepartment) && currentPerson != null && !currentPerson.Department.ToLower().Contains(FilterByDepartment.ToLower()))
-            {
-                return false;
-            }
-            return result;
-        }
-
-
+        /// Проверяет возможность фильтрации по Статусу
+        /// </summary>    
         private bool FilterStatus(object obj)
         {
             bool result = true;
@@ -416,25 +324,21 @@ namespace WorkWithDB
 
         //----------------------------------------------------------------------------------------------------
         /// <summary>
-        /// Обработчик события изменения текста для поиска по ФИО
-        /// </summary>       
-        private static void FilterByDepartment_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {           
+        /// Обработчик события изменения текста для поиска по Статусу
+        /// </summary> 
+        private static void FilterByStatus_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
             var current = d as dbViewModel;
             if (current != null)
-            {
+            {                
                 current.GeneralInfoCollection.Filter = null;
-                current.GeneralInfoCollection.Filter = current.FilterDepartment;
-                //current.GeneralInfoCollection.Filter += current.Filter;
+                current.GeneralInfoCollection.Filter = current.FilterStatus;
             }
         }
 
-        #endregion
-
-
         //----------------------------------------------------------------------------------------------------
         /// <summary>
-        /// Проверяет возможность фильтрации по ФИО
+        /// Проверяет возможность фильтрации по должности
         /// </summary>      
         private bool FilterPost(object obj)
         {
@@ -446,6 +350,52 @@ namespace WorkWithDB
             }
             return result;
         }
+
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Обработчик события изменения текста для поиска по Должности
+        /// </summary> 
+        private static void FilterByPost_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {            
+            var current = d as dbViewModel;
+            if (current != null)
+            {                
+                current.GeneralInfoCollection.Filter = null;
+                current.GeneralInfoCollection.Filter = current.FilterPost;
+            }
+        }   
+                
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Проверяет возможность фильтрации по Отделу
+        /// </summary>        
+        private bool FilterDepartment(object obj)
+        {
+            bool result = true;
+            GeneralPersonsInfo currentPerson = obj as GeneralPersonsInfo;
+            if (!string.IsNullOrEmpty(FilterByDepartment) && currentPerson != null && !currentPerson.Department.ToLower().Contains(FilterByDepartment.ToLower()))
+            {
+                return false;
+            }
+            return result;
+        } 
+        
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Обработчик события изменения текста для поиска по отделу
+        /// </summary>       
+        private static void FilterByDepartment_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var current = d as dbViewModel;
+            if (current != null)
+            {
+                current.GeneralInfoCollection.Filter = null;
+                current.GeneralInfoCollection.Filter = current.FilterDepartment;
+                
+            }
+        }
+               
+        #endregion
 
         //----------------------------------------------------------------------------------------------------
         /// <summary>
@@ -474,29 +424,50 @@ namespace WorkWithDB
             GeneralInfoCollection = CollectionViewSource.GetDefaultView(GeneralCollection);
         }
 
-
         //----------------------------------------------------------------------------------------------------
-       /// <summary>
-       /// Команда отображения статистики
-       /// </summary>
+        /// <summary>
+        /// Команда отображения статистики
+        /// </summary>
         public ICommand GetStatisticsCommand { get; set; }        
         private void GetStatictics(object sender)
         {
             int personsCount = 0;
+            MessageBoxResult result = MessageBoxResult.No;
+
             if (Employ)
             {
-                personsCount = GeneralCollection.Count(i => i.Status == SelectedStatus && i.DateEmploy > DateFrom && (!i.DateUnEmploy.HasValue || i.DateEmploy < DateTo));
+                if (string.IsNullOrEmpty(SelectedStatus))
+                {
+                    result = MessageBox.Show("Вы не выбрали статус сотрудников компании. \n Показать сотрудников с любым статусом?", "Отсутствие выбора критерия", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        personsCount = GeneralCollection.Count(i => i.DateEmploy > DateFrom && (!i.DateUnEmploy.HasValue || i.DateEmploy < DateTo));
+                    }
+                }
+                else
+                {
+                    personsCount = GeneralCollection.Count(i => i.Status == SelectedStatus && i.DateEmploy > DateFrom && (!i.DateUnEmploy.HasValue || i.DateEmploy < DateTo));
+                }
             }
             else
             {
                 if (UnEmploy)
                 {
-                    personsCount = GeneralCollection.Count(i => i.Status == SelectedStatus && (!i.DateUnEmploy.HasValue || i.DateUnEmploy > DateFrom) && (!i.DateUnEmploy.HasValue || i.DateUnEmploy < DateTo));
+                    if (string.IsNullOrEmpty(SelectedStatus))
+                    {
+                        result = MessageBox.Show("Вы не выбрали статус сотрудников компании. \n Показать сотрудников с любым статусом?", "Отсутствие выбора критерия", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            personsCount = GeneralCollection.Count(i => (i.DateUnEmploy != null && i.DateUnEmploy > DateFrom) && (i.DateUnEmploy != null && i.DateUnEmploy < DateTo));
+                        }//!i.DateUnEmploy.HasValue ||
+                    }
+                    else
+                    {
+                        personsCount = GeneralCollection.Count(i => i.Status == SelectedStatus && (i.DateUnEmploy != null && i.DateUnEmploy > DateFrom) && (!i.DateUnEmploy.HasValue || i.DateUnEmploy < DateTo));
+                    }
                 }
                 else
                 {
-                    MessageBoxResult result = MessageBoxResult.No;
-
                     if (!string.IsNullOrEmpty(SelectedStatus))
                     {
                         result = MessageBox.Show("Вы не выбрали, кто вас интересует: Нанятые или Уволенные сотрудники. \n Показать количество всех сотрудников компании c этим статусом?", "Отсутствие выбора критерия", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -519,6 +490,11 @@ namespace WorkWithDB
             OutputText = "Количество сотрудников, удовлетворяющих условиям : " + personsCount.ToString();                      
         }
 
+
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Команда сброса фильтров
+        /// </summary>
         public ICommand ClearFilterCommand { get; set; }
 
         private void ClearFilter(object sender)
@@ -535,9 +511,9 @@ namespace WorkWithDB
         }
 
         //----------------------------------------------------------------------------------------------------
-            /// <summary>
-            /// Обработчик собития изменения свойств класса
-            /// </summary>
+        /// <summary>
+        /// Обработчик собития изменения свойств класса
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string property = "")
         {
@@ -549,5 +525,4 @@ namespace WorkWithDB
 
     }
     //----------------------------------------------------------------------------------------------------
-
 }

@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ConnectToDBWindow.xaml.cs">
+      <DependentUpon>ConnectToDBWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="dbViewModel.cs" />
     <Compile Include="GeneralPersonsInfo.cs" />
     <Compile Include="Post.cs" />
@@ -66,6 +69,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TestDBDataSet.xsd</DependentUpon>
     </Compile>
+    <Page Include="ConnectToDBWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

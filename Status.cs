@@ -18,6 +18,7 @@ namespace WorkWithDB
         private int statusId;
         private string name;
 
+        #region Properties
         /// <summary>
         /// Код  статуса
         /// </summary>
@@ -43,33 +44,24 @@ namespace WorkWithDB
                 OnPropertyChanged(nameof(Name));
             }
         }
+        #endregion
 
 
-        //----------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// Обработчик собития изменения свойств класса
-        /// </summary>
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string property = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-        }
+        
 
         //----------------------------------------------------------------------------------------------------
         /// <summary>
         /// Получение данных о статусах
         /// </summary>
         /// <returns>Список статусов сотрудников</returns>
-        public static List<Status> GetStatuses()
-        {
+        public static List<Status> GetStatuses(string connectionString)
+        {            
             List<Status> statuses = new List<Status>();
 
             // название процедуры
             string sqlExpression = "dbo.sp_GetStatuses";
 
-            SqlConnection connection = new SqlConnection(DataBaseConnector.ConnectionString);
+            SqlConnection connection = new SqlConnection(connectionString);
             try
             {
                 connection.Open();
@@ -77,7 +69,7 @@ namespace WorkWithDB
             catch (SqlException se)
             {
                 MessageBox.Show(se.Message, "Ошибка соединения", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
+                return statuses;
             }
 
             using (connection)
@@ -104,5 +96,19 @@ namespace WorkWithDB
 
             return statuses;
         }
+        
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Обработчик собития изменения свойств класса
+        /// </summary>
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string property = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+        }
+        //----------------------------------------------------------------------------------------------------
     }
+    //----------------------------------------------------------------------------------------------------
 }
